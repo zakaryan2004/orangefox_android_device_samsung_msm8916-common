@@ -35,75 +35,12 @@ TARGET_CPU_SMP := true
 TARGET_CPU_VARIANT := cortex-a53
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 
-# ANT+
-BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
-
-# ART
-WITH_DEXPREOPT := false
-WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
-
-# Audio
-AUDIO_CONFIG_PATH := hardware/qcom/audio-caf/msm8916/configs
-BOARD_USES_ALSA_AUDIO := true
-BOARD_USES_GENERIC_AUDIO := true
-TARGET_USES_QCOM_MM_AUDIO := true
-USE_CUSTOM_AUDIO_POLICY := 1
-USE_XML_AUDIO_POLICY_CONF := 1
-
-# Mixer paths
-ifneq ($(USE_CUSTOM_MIXER_PATHS), true)
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/audio/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml
-endif
-
-#XML Audio configuration files
-ifeq ($(USE_XML_AUDIO_POLICY_CONF), 1)
-PRODUCT_COPY_FILES += \
-    $(TOPDIR)$(AUDIO_CONFIG_PATH)/msm8916_32/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
-    $(TOPDIR)$(AUDIO_CONFIG_PATH)/msm8916_32/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
-    $(TOPDIR)frameworks/av/services/audiopolicy/config/a2dp_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/a2dp_audio_policy_configuration.xml \
-    $(TOPDIR)frameworks/av/services/audiopolicy/config/audio_policy_volumes.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_volumes.xml \
-    $(TOPDIR)frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml \
-    $(TOPDIR)frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml \
-    $(TOPDIR)frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration.xml
-endif
-
 # Binder API version
 TARGET_USES_64_BIT_BINDER := true
-
-# Bluetooth
-BOARD_HAVE_BLUETOOTH := true
-BOARD_HAVE_BLUETOOTH_QCOM := true
-QCOM_BT_USE_BTNV := true
-BLUETOOTH_HCI_USE_MCT := true
-
-# Bootanimation
-TARGET_BOOTANIMATION_HALF_RES := true
 
 # Bootloader
 BOARD_PROVIDES_BOOTLOADER_MESSAGE := false
 TARGET_BOOTLOADER_BOARD_NAME := MSM8916
-
-# Camera
-BOARD_GLOBAL_CFLAGS += -DMETADATA_CAMERA_SOURCE
-TARGET_HAS_LEGACY_CAMERA_HAL1 := true
-TARGET_NEEDS_LEGACY_CAMERA_HAL1_DYN_NATIVE_HANDLE := true
-TARGET_PROVIDES_CAMERA_HAL := true
-TARGET_USE_VENDOR_CAMERA_EXT := true
-TARGET_USES_QTI_CAMERA_DEVICE := true
-USE_DEVICE_SPECIFIC_CAMERA := true
-
-# Charger
-BOARD_CHARGER_ENABLE_SUSPEND    := true
-BOARD_CHARGER_SHOW_PERCENTAGE   := true
-BOARD_CHARGER_DISABLE_INIT_BLANK := true
-
-# CMHW
-BOARD_USES_CYANOGEN_HARDWARE := true
-BOARD_HARDWARE_CLASS += \
-	hardware/lineage/lineagehw \
-	hardware/samsung/lineagehw \
-	$(LOCAL_PATH)/lineagehw
 
 # Display
 MAX_EGL_CACHE_KEY_SIZE := 12*1024
@@ -137,22 +74,6 @@ BOARD_SYSTEMIMAGE_PARTITION_TYPE    := ext4
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
-# FM
-AUDIO_FEATURE_ENABLED_FM := true
-BOARD_HAVE_QCOM_FM := true
-AUDIO_FEATURE_ENABLED_FM_POWER_OPT := true
-
-# GPS
-TARGET_NO_RPC := true
-USE_DEVICE_SPECIFIC_GPS := true
-
-# Healthd
-BOARD_HAL_STATIC_LIBRARIES := libhealthd.lineage
-
-# Init
-TARGET_INIT_VENDOR_LIB := libinit_msm8916
-TARGET_RECOVERY_DEVICE_MODULES := libinit_msm8916
-
 # Kernel
 BOARD_KERNEL_CMDLINE += \
 	console=null \
@@ -184,29 +105,12 @@ ifneq ($(wildcard $(ANDROID_BUILD_TOP)/prebuilts/gcc/$(HOST_OS)-x86/arm/arm-eabi
     KERNEL_TOOLCHAIN_PREFIX := arm-eabi-
 endif
 
-# Malloc implementation
-MALLOC_SVELTE := true
-
-# Media
-TARGET_QCOM_MEDIA_VARIANT           := caf
-TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
-
-# NFC
-BOARD_NFC_HAL_SUFFIX := msm8916
 
 # Partition sizes
 BOARD_BOOTIMAGE_PARTITION_SIZE      := 13631488
 BOARD_RECOVERYIMAGE_PARTITION_SIZE  := 15728640
 BOARD_CACHEIMAGE_PARTITION_SIZE     := 314572800
 BOARD_FLASH_BLOCK_SIZE              := 131072
-
-# Power
-TARGET_POWERHAL_VARIANT := qcom
-CM_POWERHAL_EXTENSION := qcom
-WITH_QC_PERF := true
-
-# Protobuf
-PROTOBUF_SUPPORTED := true
 
 # Qualcomm support
 TARGET_USES_QCOM_BSP := true
@@ -245,6 +149,8 @@ TW_NO_REBOOT_BOOTLOADER := true
 TW_NO_USB_STORAGE := true
 TW_TARGET_USES_QCOM_BSP := false
 TW_THEME := portrait_hdpi
+TW_EXCLUDE_SUPERSU := true
+
 
 ifeq ($(RECOVERY_VARIANT),twrp)
 	BOARD_GLOBAL_CFLAGS += -DTW_USE_MINUI_CUSTOM_FONTS
@@ -258,40 +164,5 @@ endif
 include device/qcom/sepolicy/sepolicy.mk
 include device/qcom/sepolicy/legacy-sepolicy.mk
 
-#BOARD_SEPOLICY_DIRS += \
-#    $(LOCAL_PATH)/sepolicy
-
-# Shims
-TARGET_LD_SHIM_LIBS := \
-    /system/lib/libmmjpeg_interface.so|libboringssl-compat.so \
-    /system/lib/libsec-ril.so|libshim_secril.so \
-    /system/lib/libsec-ril-dsds.so|libshim_secril.so \
-    /system/lib/hw/camera.vendor.msm8916.so|libcamera_shim.so \
-    /system/vendor/lib/libizat_core.so|libshim_gps.so \
-    /system/vendor/lib/libqomx_jpegenc.so|libboringssl-compat.so
-
-# Snapdragon LLVM
-TARGET_USE_SDCLANG := true
-
-# Time services
-BOARD_USES_QC_TIME_SERVICES := true
-
-# Vold
-BOARD_VOLD_DISC_HAS_MULTIPLE_MAJORS := true
-BOARD_VOLD_MAX_PARTITIONS := 67
-TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/file
-
-# Wifi
-BOARD_HAS_QCOM_WLAN := true
-BOARD_HAS_QCOM_WLAN_SDK := true
-BOARD_HOSTAPD_DRIVER := NL80211
-BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_qcwcn
-BOARD_WLAN_DEVICE := qcwcn
-BOARD_WPA_SUPPLICANT_DRIVER := NL80211
-BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_qcwcn
-TARGET_USES_QCOM_WCNSS_QMI := true
-TARGET_USES_WCNSS_CTRL := true
-WIFI_DRIVER_FW_PATH_AP := "ap"
-WIFI_DRIVER_FW_PATH_STA := "sta"
-WLAN_CHIPSET := pronto
-WPA_SUPPLICANT_VERSION := VER_0_8_X
+BOARD_SEPOLICY_DIRS += \
+   $(LOCAL_PATH)/sepolicy
